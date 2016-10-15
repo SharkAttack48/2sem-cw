@@ -4,18 +4,51 @@
 
 using namespace std;
 
+struct node * create (unsigned);//Creating linked list
+void print (node *);
+void dellist (node *, unsigned);//List processing
+void destroy (node *);
+
 struct node
 {
     unsigned inf;
     node * ref;
 };
 
-void print (node *a)
+int main ()
 {
-    node *p;
-    for (p=a; p; p=p->ref)
-        cout <<" "<< p->inf;
-    cout << '\n';
+    node *s;
+    unsigned r;
+    cout << "Enter N = ";
+    cin >> r;
+
+    double e1;
+	clock_t t1;
+    t1 = clock();
+
+    s = create (r);
+
+	e1 = double(clock() - t1) / CLOCKS_PER_SEC;
+
+	cout << "All numbers: \n";
+    print (s);
+
+    cout << "Elapsed time of creation linked list: " << e1 << " sec.\n";
+
+	clock_t t2;
+    double e2;
+    t2 = clock();
+
+    dellist (s -> ref, r);
+	
+	e2 = double(clock() - t2) / CLOCKS_PER_SEC;
+
+	cout << "Prime numbers: \n";
+	print (s);
+
+    cout << "Elapsed time of deleting composite numbers: " << e2 << " sec.\n";
+
+    destroy (s);
 }
 
 node * create (unsigned n)
@@ -35,11 +68,19 @@ node * create (unsigned n)
     return b;
 }
 
+void print (node *a)
+{
+    node *p;
+    for (p=a; p; p=p->ref)
+        cout <<" "<< p->inf;
+    cout << '\n';
+}
+
 void dellist (node * a, unsigned b)
 {
     node *p, *q;
     unsigned t;
-	for (t = a -> inf; t*t <= b; t++)
+	for (t = a -> inf; t*t <= b; a = a -> ref, t = a -> inf)
     {
         p = a -> ref;
         while (p -> ref)
@@ -64,37 +105,4 @@ void destroy (node * a)
         a=a->ref;
         delete p;
     }
-}
-
-int main ()
-{
-	clock_t the_time1;
-    double elapsed_time1;
-
-    the_time1 = clock();
-
-    node *s;
-    unsigned r;
-    cout << "Enter N = ";
-    cin >> r;
-    s = create (r);
-	cout << "4ll NUMB3R5: \n";
-    print (s);
-	
-	elapsed_time1 = double(clock() - the_time1) / CLOCKS_PER_SEC;
-    std::cout << "Elapsed time " << elapsed_time1 << " sec." << std::endl;
-
-	clock_t the_time;
-    double elapsed_time;
-
-    the_time = clock();
-
-    dellist (s -> ref, r);
-	cout << "PR1M3 NUMB3R5: \n";
-	print (s);
-	
-	elapsed_time = double(clock() - the_time) / CLOCKS_PER_SEC;
-    std::cout << "Elapsed time " << elapsed_time << " sec." << std::endl;
-
-    destroy (s);
 }
